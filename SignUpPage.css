@@ -1,0 +1,36 @@
+/* Error Message */
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Signup Box */
+  .signup-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .signup-box h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .signup-box p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .signup-box .error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
