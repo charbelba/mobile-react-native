@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Correct import
 
@@ -15,6 +17,9 @@ const SearchListing = ({ listings }) => {
     price: "",
     bedrooms: "",
   });
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
 
   const handleInputChange = (value, name) => {
     setFilters({ ...filters, [name]: value });
@@ -34,6 +39,18 @@ const SearchListing = ({ listings }) => {
 
     return isLocationMatch && isPriceMatch && isBedroomsMatch;
   });
+
+  // Function to handle card click and show modal
+  const handleCardClick = (listing) => {
+    setSelectedListing(listing);
+    setModalVisible(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedListing(null);
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -79,19 +96,64 @@ const SearchListing = ({ listings }) => {
       <View style={styles.listings}>
         {filteredListings.length > 0 ? (
           filteredListings.map((listing) => (
-            <View key={listing.id} style={styles.card}>
+            <TouchableOpacity
+              key={listing.id}
+              style={styles.card}
+              onPress={() => handleCardClick(listing)}
+            >
               <Image source={{ uri: listing.image }} style={styles.image} />
               <View style={styles.cardContent}>
                 <Text style={styles.title}>{listing.title}</Text>
                 <Text style={styles.location}>{listing.location}</Text>
                 <Text style={styles.price}>${listing.price}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text>No listings match your filters.</Text>
         )}
       </View>
+
+      {/* Modal for showing property details */}
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {selectedListing && (
+              <>
+                <Text style={styles.modalTitle}>{selectedListing.title}</Text>
+                <Image
+                  source={{ uri: selectedListing.image }}
+                  style={styles.modalImage}
+                />
+                <Text style={styles.modalText}>
+                  Location: {selectedListing.location}
+                </Text>
+                <Text style={styles.modalText}>
+                  Price: ${selectedListing.price}
+                </Text>
+                <Text style={styles.modalText}>
+                  Bedrooms: {selectedListing.bedrooms}
+                </Text>
+                <Text style={styles.modalText}>Description:</Text>
+                <Text style={styles.modalDescription}>
+                  {selectedListing.description}
+                </Text>
+                <TouchableOpacity
+                  onPress={closeModal}
+                  style={styles.closeButton}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -101,11 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#f5f5f5",
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
@@ -155,6 +212,51 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#e91e63",
+  },
+
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 8,
+    width: "80%",
+    maxHeight: "80%",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  modalDescription: {
+    fontSize: 14,
+    color: "#777",
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: "#e91e63",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

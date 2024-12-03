@@ -68,7 +68,7 @@ const PostListing = ({ listings, setListings }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
-      {/* Image Picker */}
+      {}
       <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
         {formData.image ? (
           <Image source={{ uri: formData.image }} style={styles.imagePreview} />
@@ -77,7 +77,7 @@ const PostListing = ({ listings, setListings }) => {
         )}
       </TouchableOpacity>
 
-      {/* Input Fields */}
+      {}
       <TextInput
         style={styles.input}
         placeholder="Property Title"

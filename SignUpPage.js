@@ -16,11 +16,35 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const navigation = useNavigation();
 
+  // Function to validate email format
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+  };
+
+  // Function to validate password strength
+  const validatePassword = (password) => {
+    return password.length >= 6; // Password should be at least 6 characters
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Check if email is valid
+    if (!validateEmail(email)) {
+      Alert.alert("Invalid email format. Please enter a valid email.");
+      return;
+    }
+
+    // Check if username is taken
     if (accounts.some((account) => account.username === username)) {
       Alert.alert("Username already exists. Please choose a different one.");
+      return;
+    }
+
+    // Check if password is strong enough
+    if (!validatePassword(password)) {
+      Alert.alert("Password must be at least 6 characters long.");
       return;
     }
 
